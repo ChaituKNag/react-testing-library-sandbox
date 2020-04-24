@@ -1,0 +1,15 @@
+.todoWrapper {
+  margin: 20px;
+}
+.todo {
+  border: 1px solid palevioletred;
+  border-radius: 3px;
+  padding: 5px 10px;
+  margin: 10px;
+}
+
+.todoDone {
+  color: blue;
+  background-color: lightgrey;
+  text-decoration: line-through;
+}
