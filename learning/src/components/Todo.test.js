@@ -1,25 +1,31 @@
 import React from "react";
-import { render, fireEvent, screen, waitFor } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import Todo from "./Todo";
 
 test("should render Todo", async () => {
+  const doneHandler = jest.fn(() => {});
+  const text = "Learn Testing React Components";
   const { getByText, rerender } = render(
-    <Todo text="Learn Testing React Components" setDone={() => {}} />
+    <Todo text={text} setDone={doneHandler} done={false} />
   );
 
-  let textElement = getByText("Learn Testing React Components");
+  let textElement = getByText(text);
 
   expect(textElement).toBeInTheDocument();
   expect(textElement).toBeVisible();
 
   fireEvent.click(textElement);
 
-  textElement = getByText("Learn Testing React Components");
+  expect(doneHandler).toBeCalledTimes(1);
 
-  console.log("************** ", textElement.getAttribute("aria-label"));
+  fireEvent.click(textElement);
 
-  expect(textElement).toHaveAttribute(
-    "aria-label",
-    `Learn Testing React Components - done`
-  );
+  expect(doneHandler).toBeCalledTimes(2);
+  expect(textElement).toHaveAttribute("aria-label", `${text}`);
+
+  rerender(<Todo text={text} setDone={doneHandler} done={true} />);
+
+  textElement = getByText(text);
+
+  expect(textElement).toHaveAttribute("aria-label", `${text} - done`);
 });
